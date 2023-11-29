@@ -1,7 +1,12 @@
 import aws_cdk as cdk
 from constructs import Construct
 from aws_cdk.pipelines import CodePipeline, CodePipelineSource, ShellStep
+from my_pipeline.my_pipeline_app_stage import MyPipelineAppStage
+import os
+from dotenv import load_dotenv
+from aws_cdk.pipelines import ManualApprovalStep
 
+load_dotenv()
 class MyPipelineStack(cdk.Stack):
 
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
@@ -16,3 +21,14 @@ class MyPipelineStack(cdk.Stack):
                                 "cdk synth"]
                         )
                     )
+        
+        pipeline.add_stage(MyPipelineAppStage(self, "test",
+            env=cdk.Environment(account=os.environ.get('CDK_DEFAULT_ACCOUNT'), region="us-east-1")))
+        
+        
+
+        testing_stage = pipeline.add_stage(MyPipelineAppStage(self, "staging",
+            env=cdk.Environment(account=os.environ.get('CDK_DEFAULT_ACCOUNT'), region="us-east-1")))
+
+        testing_stage.add_post(ManualApprovalStep('approval'))
+        
