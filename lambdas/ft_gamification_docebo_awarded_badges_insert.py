@@ -6,5 +6,5 @@ def lambda_handler(event, context):
         'headers': {
             'Content-Type': 'text/plain'
         },
-        'body': 'This is the ft gamification docebo awarded badges insert function'
+        'body': 'This is the ft gamification docebo awarded badges insert function by Trey Fletcher'
     }

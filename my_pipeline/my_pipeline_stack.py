@@ -1,6 +1,6 @@
 import aws_cdk as cdk
 from constructs import Construct
-from aws_cdk.pipelines import CodePipeline, CodePipelineSource, ShellStep
+from aws_cdk.pipelines import CodePipeline, CodeBuildStep, CodePipelineSource, ShellStep
 from my_pipeline.my_pipeline_app_stage import MyPipelineAppStage
 import os
 from dotenv import load_dotenv
@@ -25,10 +25,15 @@ class MyPipelineStack(cdk.Stack):
         pipeline.add_stage(MyPipelineAppStage(self, "test",
             env=cdk.Environment(account=os.environ.get('CDK_DEFAULT_ACCOUNT'), region="us-east-1")))
         
+        # pipeline.add_pre(CodeBuildStep("unit tests", {
+        #     commands: [
+        #         "pytest -v"
+        #     ]
+        # }))
         
 
         testing_stage = pipeline.add_stage(MyPipelineAppStage(self, "staging",
             env=cdk.Environment(account=os.environ.get('CDK_DEFAULT_ACCOUNT'), region="us-east-1")))
 
-        testing_stage.add_post(ManualApprovalStep('approval'))
+        testing_stage.add_pre(ManualApprovalStep('approval'))
         

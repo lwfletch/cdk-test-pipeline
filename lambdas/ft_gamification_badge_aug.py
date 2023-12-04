@@ -3,5 +3,5 @@ import json
 def lambda_handler(event, context):
     return {
         'statusCode': 200,
-        'body': json.dumps('This is the FT Gamification badge aug lambda')
+        'body': json.dumps('Trey, Welcome to the FT Gamification badge aug lambda')
     }
